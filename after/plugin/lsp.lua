@@ -1,113 +1,85 @@
 local lsp = require("lsp-zero")
+local cmp = require('cmp')
 local luasnip = require("luasnip")
+
+vim.diagnostic.config({
+  virtual_text = false, --for lsp_lines
+})
+
+vim.opt.signcolumn = 'yes'
 lsp.preset("recommended")
+lsp.nvim_workspace()
+require("neodev").setup({})
 
-
-require("neodev").setup({
-  -- add any options here, or leave empty to use the default settings
+lsp.set_preferences({
+  set_lsp_keymaps = false,
+  manage_nvim_cmp = true,
 })
-
-local lspconfig = require('lspconfig')
-
-lspconfig.sumneko_lua.setup({
-  settings = {
-    Lua = {
-      completion = {
-        callSnippet = "Replace"
-      }
-    }
-  }
-})
-
 
 lsp.ensure_installed({
-  'tsserver',
-  'eslint',
-  'sumneko_lua',
-  'rust_analyzer',
+    'sumneko_lua',
+    'rust_analyzer',
+    'pyright',
+    'clangd',
 })
 
--- Fix Undefined global 'vim'
 lsp.configure('sumneko_lua', {
     settings = {
         Lua = {
+            -- Fix Undefined global 'vim'
             diagnostics = {
                 globals = { 'vim' }
+            },
+            completion = {
+                callSnippet = "Replace"
             }
         }
     }
 })
 
-
-local cmp = require('cmp')
-
-cmp.setup{
-    sources = cmp.config.sources({
-        { name = 'nvim_lsp' },
-    }),
-    snippet = {
-        expand = function(args)
-            luasnip.lsp_expand(args.body)
-        end,
-    },
-}
-
-local cmp_select = {behavior = cmp.SelectBehavior.Select}
-local cmp_mappings = lsp.defaults.cmp_mappings({
-  ['<C-k>'] = cmp.mapping.select_prev_item(cmp_select),
-  ['<C-j>'] = cmp.mapping.select_next_item(cmp_select),
-  ['<Tab>'] = cmp.mapping.confirm({ select = true }),
-  ["<C-Space>"] = cmp.mapping.complete(),
-})
-
-
--- disable completion with tab
--- this helps with copilot setup
---cmp_mappings['<Tab>'] = nil
---cmp_mappings['<S-Tab>'] = nil
-
 lsp.setup_nvim_cmp({
-  mapping = cmp_mappings
+    mapping = cmp.mapping.preset.insert({
+        ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.confirm()
+            elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+                -- this will auto complete if our cursor in next to a word and we press tab
+                -- elseif has_words_before() then
+                --     cmp.complete()
+            else
+                fallback()
+            end
+        end, {"i", "s"}),
+        ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+            else
+                fallback()
+            end
+        end, {"i", "s"}),
+        ['<CR>'] = cmp.mapping.confirm({
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = false
+        }),
+        ['<C-k>'] = cmp.mapping.select_prev_item(),
+        ['<C-j>'] = cmp.mapping.select_next_item(),
+        ["<C-Space>"] = cmp.mapping.complete(),
+    }),
+    sources = {
+        {name = 'path'},
+        {name = 'nvim_lsp', keyword_length = 1},
+        {name = 'buffer', keyword_length = 3},
+        {name = 'luasnip', keyword_length = 2},
+    },
 })
 
-lsp.set_preferences({
-    suggest_lsp_servers = false,
-    sign_icons = {
-        error = 'E',
-        warn = 'W',
-        hint = 'H',
-        info = 'I'
-    }
-})
 
-lsp.on_attach(function(client, bufnr)
-  local opts = {buffer = bufnr, remap = false}
-
-  if client.name == "eslint" then
-      vim.cmd.LspStop('eslint')
-      return
-  end
-
-  vim.keymap.set("n", "<leader>vd",     vim.diagnostic.open_float, opts)
-  vim.keymap.set("n", "[d",             vim.diagnostic.goto_next, opts)
-  vim.keymap.set("n", "]d",             vim.diagnostic.goto_prev, opts)
-
-  vim.keymap.set("n", "gd",             vim.lsp.buf.definition, opts)
-  vim.keymap.set("n", "K",              vim.lsp.buf.hover, opts)
-  vim.keymap.set("n", "<leader>vws",    vim.lsp.buf.workspace_symbol, opts)
-  vim.keymap.set("n", "<leader>vca",    vim.lsp.buf.code_action, opts)
-  vim.keymap.set("n", "<leader>vrr",    vim.lsp.buf.references, opts)
-  vim.keymap.set("n", "<leader>vrn",    vim.lsp.buf.rename, opts)
-  vim.keymap.set("i", "<C-h>",          vim.lsp.buf.signature_help, opts)
-end)
+lsp.on_attach(
+    function(client, bufnr)
+        client.server_capabilities.semanticTokensProvider = nil
+        local navic = require("nvim-navic")
+        navic.attach(client, bufnr)
+    end)
 
 lsp.setup()
-
-vim.diagnostic.config({
-    virtual_text = true,
-})
-
-
-vim.api.nvim_set_var("g:cmp_completion_trigger_character", "inclusive")
-vim.api.nvim_set_var("g:lsp_completion_trigger_character", "inclusive")
-

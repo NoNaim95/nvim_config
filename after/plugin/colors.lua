@@ -1,11 +1,36 @@
---require('rose-pine').setup({
---    disable_background = true
---})
+ require('monokai').setup{
+    palette = {
+        name = 'monokai_deni',
+        base1 = '#272a30',
+        base2 = '#181a1b',
+        base3 = '#2E323C',
+        base4 = '#333842',
+        base5 = '#4d5154',
+        base6 = '#9ca0a4',
+        base7 = '#b1b1b1',
+        border = '#a1b5b1',
+        brown = '#504945',
+        white = '#f8f8f0',
+        grey = '#8F908A',
+        black = '#000000',
+        pink = '#f92672',
+        green = '#a6e22e',
+        aqua = '#66d9ef',
+        yellow = '#e6db74',
+        orange = '#fd971f',
+        purple = '#ae81ff',
+        red = '#e95678',
+        diff_add = '#3d5213',
+        diff_remove = '#4a0f23',
+        diff_change = '#27406b',
+        diff_text = '#23324d',
+    }
+}
+
 --require('monokai').setup { palette = require('monokai').pro }
 
 function ColorMyPencils(color)
 	color = color or "monokai"
-    vim.o.background = "dark"
 	vim.cmd.colorscheme(color)
 
 	--vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
@@ -13,4 +38,4 @@ function ColorMyPencils(color)
 
 end
 
-ColorMyPencils()
+--ColorMyPencils("monokai_deni")
