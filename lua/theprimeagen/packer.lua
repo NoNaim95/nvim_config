@@ -43,6 +43,8 @@ return require('packer').startup(
                 { 'rafamadriz/friendly-snippets' },
             }
         }
+        use("mfussenegger/nvim-dap")
+        use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
         use {
             "SmiteshP/nvim-navic",
             requires = "neovim/nvim-lspconfig"
@@ -88,11 +90,10 @@ return require('packer').startup(
             as = 'monokai-pro.nvim'
         }
 
-
-        --
         use("chrisbra/Colorizer")
         use("folke/neodev.nvim")
         use("wfxr/minimap.vim")
+        use("nvim-tree/nvim-web-devicons")
 
         use {
             'nvim-tree/nvim-tree.lua',
@@ -110,4 +111,9 @@ return require('packer').startup(
         use("tpope/vim-eunuch")
         use("christoomey/vim-tmux-navigator")
         use("voldikss/vim-floaterm")
+        use("lukas-reineke/indent-blankline.nvim")
+        use("RRethy/vim-illuminate")
+        use("chrisbra/NrrwRgn")
+        use("simrat39/symbols-outline.nvim")
+        use { "romgrk/barbar.nvim", requires = "nvim-web-devicons" }
     end)

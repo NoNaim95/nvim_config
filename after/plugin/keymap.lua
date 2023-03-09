@@ -10,6 +10,11 @@ local opts = {
 }
 
 local mappings = {
+    d = {
+        name = "Debug",
+        b = { "<cmd>lua require('dap').toggle_breakpoint()<CR>", "Toggle Breakpoint" },
+        r = { "<cmd>lua require('dap').repl.open()<CR>", "Open Repl" },
+    },
     f = {
         name = "Find",
         b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
@@ -63,6 +68,41 @@ local mappings = {
     },
 }
 
+local g_opts = {
+    mode = "n", -- Floaterm mode
+    prefix = "g",
+    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+    silent = true, -- use `silent` when creating keymaps
+    noremap = true, -- use `noremap` when creating keymaps
+    nowait = true, -- use `nowait` when creating keymaps
+}
+
+local g_mappings = {
+    name = "Go",
+    d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Definition" },
+    D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Declaration" },
+    i = { "<cmd>lua vim.lsp.buf.implementation()<cr>", "Implementation" },
+    r = { "<cmd>lua vim.lsp.buf.references()<cr>", "References" },
+    t = { "<cmd> BufferNext<cr>", "Go to next Tab" },
+    T = { "<cmd> BufferNext<cr>", "Go to previous Tab" },
+}
+
+local direct_opts = {
+    mode = "n", -- Floaterm mode
+    prefix = "",
+    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+    silent = true, -- use `silent` when creating keymaps
+    noremap = true, -- use `noremap` when creating keymaps
+    nowait = true, -- use `nowait` when creating keymaps
+}
+
+local direct_mappings = {
+    name = "Direct",
+    K = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Hover Symbol" },
+    ["<F5>"] = { "<cmd>lua require('dap').continue()<CR>", "Continue" },
+    ["<F6>"] = { "<cmd>lua require('dap').step_over()<CR>", "Step over" },
+    ["<F7>"] = { "<cmd>lua require('dap').step_into()<CR>", "Step into" },
+}
 
 local t_opts = {
     mode = "t", -- Floaterm mode
@@ -86,3 +126,5 @@ wk.register(mappings, opts)
 wk.register(v_mappings, v_opts)
 wk.register(t_mappings, t_opts)
 wk.register(m_mappings, m_opts)
+wk.register(g_mappings, g_opts)
+wk.register(direct_mappings, direct_opts)
