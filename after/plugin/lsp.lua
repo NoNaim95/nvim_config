@@ -3,7 +3,7 @@ local cmp = require('cmp')
 local luasnip = require("luasnip")
 
 vim.diagnostic.config({
-  virtual_text = false, --for lsp_lines
+    virtual_text = false, --for lsp_lines
 })
 
 vim.opt.signcolumn = 'yes'
@@ -12,8 +12,8 @@ lsp.nvim_workspace()
 require("neodev").setup({})
 
 lsp.set_preferences({
-  set_lsp_keymaps = false,
-  manage_nvim_cmp = true,
+    set_lsp_keymaps = false,
+    manage_nvim_cmp = true,
 })
 
 lsp.ensure_installed({
@@ -37,6 +37,69 @@ lsp.configure('sumneko_lua', {
     }
 })
 
+lsp.configure('rust_analyzer', {
+    settings = {
+        ['rust-analyzer'] = {
+            cargo = {
+                buildScripts = {
+                    enable = true,
+                },
+            },
+            procMacro = {
+                enable = true
+            },
+            checkOnSave = {
+                enable = true,
+                allFeatures = true,
+                overrideCommand = {
+                    'cargo', 'clippy', '--workspace', '--message-format=json',
+                    '--all-targets', '--all-features'
+                }
+            }
+        }
+    }
+})
+
+
+function dump(o)
+    if type(o) == 'table' then
+        local s = '{ '
+        for k, v in pairs(o) do
+            if type(k) ~= 'number' then k = '"' .. k .. '"' end
+            s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
+        end
+        return s .. '} '
+    else
+        return tostring(o)
+    end
+end
+
+local on_format = function(err, result, ctx, config)
+    vim.lsp.handlers["textDocument/formatting"](err, result, ctx, config)
+    print(dump(ctx.params))
+end
+
+lsp.configure('clangd', {
+    handlers = {
+        ["textDocument/formatting"] = vim.lsp.with(
+            on_format,
+            {
+
+            }
+        )
+    }
+})
+
+vim.api.nvim_create_autocmd(
+    "BufWritePost",
+    {
+        group = vim.api.nvim_create_augroup("my_group", { clear = true }),
+        callback = function()
+            vim.lsp.buf.format({ async = true })
+        end,
+    }
+)
+
 lsp.setup_nvim_cmp({
     mapping = cmp.mapping.preset.insert({
         ["<Tab>"] = cmp.mapping(function(fallback)
@@ -50,14 +113,14 @@ lsp.setup_nvim_cmp({
             else
                 fallback()
             end
-        end, {"i", "s"}),
+        end, { "i", "s" }),
         ["<S-Tab>"] = cmp.mapping(function(fallback)
             if luasnip.jumpable(-1) then
                 luasnip.jump(-1)
             else
                 fallback()
             end
-        end, {"i", "s"}),
+        end, { "i", "s" }),
         ['<CR>'] = cmp.mapping.confirm({
             behavior = cmp.ConfirmBehavior.Replace,
             select = false
@@ -67,19 +130,25 @@ lsp.setup_nvim_cmp({
         ["<C-Space>"] = cmp.mapping.complete(),
     }),
     sources = {
-        {name = 'path'},
-        {name = 'nvim_lsp', keyword_length = 1},
-        {name = 'luasnip', keyword_length = 2},
-        {name = 'buffer', keyword_length = 3},
+        { name = 'path' },
+        { name = 'nvim_lsp', keyword_length = 1 },
+        { name = 'luasnip', keyword_length = 2 },
+        { name = 'buffer', keyword_length = 3 },
     },
 })
 
-
+local navbuddy = require("nvim-navbuddy")
 lsp.on_attach(
     function(client, bufnr)
         client.server_capabilities.semanticTokensProvider = nil
         local navic = require("nvim-navic")
         navic.attach(client, bufnr)
-    end)
+        navbuddy.attach(client, bufnr)
+    end
+)
+
+
+
+
 
 lsp.setup()

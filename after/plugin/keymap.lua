@@ -1,4 +1,4 @@
-local wk = require("which-key")
+local which_key = require("which-key")
 
 local opts = {
     mode = "n", -- NORMAL mode
@@ -46,10 +46,12 @@ local mappings = {
             "Workspace Diagnostics",
         },
         f = { "<cmd>lua vim.lsp.buf.format({ async = true })<cr>", "Format" },
-        r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename Symbol"},
+        r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename Symbol" },
         F = { "<cmd>LspToggleAutoFormat<cr>", "Toggle Autoformat" },
         i = { "<cmd>LspInfo<cr>", "Info" },
         h = { "<cmd>lua require('lsp-inlayhints').toggle()<cr>", "Toggle Hints" },
+        n = { "<cmd>lua vim.diagnostic.goto_next() <cr>", "Go to next Diagnostic" },
+        p = { "<cmd>lua vim.diagnostic.goto_prev() <cr>", "Go to previous Diagnostic" },
         H = { "<cmd>IlluminationToggle<cr>", "Toggle Doc HL" },
         I = { "<cmd>LspInstallInfo<cr>", "Installer Info" },
         j = {
@@ -60,11 +62,12 @@ local mappings = {
     },
     t = {
         name = "terminal",
-        n = { "<cmd>FloatermNew<cr>", "New Pane" },
+        n = { "<cmd>FloatermNew --width=0.8 --height=0.8 <cr>", "New Pane" },
         h = { "<cmd>FloatermPrev<cr>", "Previous Pane" },
         l = { "<cmd>FloatermNext<cr>", "Next Pane" },
-        t = { "<cmd>FloatermToggle<cr>", "Toggle Floaterm" },
+        t = { "<cmd>FloatermToggle <cr>", "Toggle Floaterm" },
         q = { "<cmd>FloatermKill<cr>", "Kill Pane" },
+        g = { "<cmd>FloatermNew --width=1.0 --height=1.0 lazygit<cr>", "Lazygit" },
     },
 }
 
@@ -122,9 +125,9 @@ local t_mappings = {
     ["<c-q>"] = { "<cmd>FloatermKill<cr>", "Kill Pane" },
 }
 
-wk.register(mappings, opts)
-wk.register(v_mappings, v_opts)
-wk.register(t_mappings, t_opts)
-wk.register(m_mappings, m_opts)
-wk.register(g_mappings, g_opts)
-wk.register(direct_mappings, direct_opts)
+which_key.register(mappings, opts)
+which_key.register(v_mappings, v_opts)
+which_key.register(t_mappings, t_opts)
+which_key.register(m_mappings, m_opts)
+which_key.register(g_mappings, g_opts)
+which_key.register(direct_mappings, direct_opts)

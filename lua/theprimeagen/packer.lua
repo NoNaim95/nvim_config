@@ -59,6 +59,14 @@ return require('packer').startup(
         )
         use("WhoIsSethDaniel/toggle-lsp-diagnostics.nvim")
 
+        use {
+            'saecki/crates.nvim',
+            tag = 'v0.3.0',
+            requires = { 'nvim-lua/plenary.nvim' },
+            config = function()
+                require('crates').setup()
+            end,
+        }
         use("folke/zen-mode.nvim")
         use {
             "folke/which-key.nvim",
@@ -106,14 +114,30 @@ return require('packer').startup(
             'nvim-lualine/lualine.nvim',
             requires = { 'kyazdani42/nvim-web-devicons', opt = true }
         }
+
+
+        use{"folke/trouble.nvim",
+            requires = {
+                'nvim-tree/nvim-web-devicons', -- optional, for file icons
+            },
+        }
         use("ggandor/leap.nvim")
         use("tpope/vim-repeat")
         use("tpope/vim-eunuch")
         use("christoomey/vim-tmux-navigator")
         use("voldikss/vim-floaterm")
-        use("lukas-reineke/indent-blankline.nvim")
+        -- use("lukas-reineke/indent-blankline.nvim")
         use("RRethy/vim-illuminate")
         use("chrisbra/NrrwRgn")
         use("simrat39/symbols-outline.nvim")
         use { "romgrk/barbar.nvim", requires = "nvim-web-devicons" }
+
+        use {
+            "SmiteshP/nvim-navbuddy",
+            requires = {
+                "neovim/nvim-lspconfig",
+                "SmiteshP/nvim-navic",
+                "MunifTanjim/nui.nvim"
+            }
+        }
     end)
