@@ -17,13 +17,13 @@ lsp.set_preferences({
 })
 
 lsp.ensure_installed({
-    'sumneko_lua',
+    'lua_ls',
     'rust_analyzer',
     'pyright',
     'clangd',
 })
 
-lsp.configure('sumneko_lua', {
+lsp.configure('lua_ls', {
     settings = {
         Lua = {
             -- Fix Undefined global 'vim'
@@ -61,7 +61,7 @@ lsp.configure('rust_analyzer', {
 })
 
 
-function dump(o)
+local function dump(o)
     if type(o) == 'table' then
         local s = '{ '
         for k, v in pairs(o) do
@@ -132,8 +132,8 @@ lsp.setup_nvim_cmp({
     sources = {
         { name = 'path' },
         { name = 'nvim_lsp', keyword_length = 1 },
-        { name = 'luasnip', keyword_length = 2 },
-        { name = 'buffer', keyword_length = 3 },
+        { name = 'luasnip',  keyword_length = 2 },
+        { name = 'buffer',   keyword_length = 3 },
     },
 })
 
