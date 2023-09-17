@@ -1,12 +1,12 @@
 local which_key = require("which-key")
 
 local opts = {
-    mode = "n", -- NORMAL mode
+    mode = "n",     -- NORMAL mode
     prefix = "<leader>",
-    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true, -- use `silent` when creating keymaps
+    buffer = nil,   -- Global mappings. Specify a buffer number for buffer local mappings
+    silent = true,  -- use `silent` when creating keymaps
     noremap = true, -- use `noremap` when creating keymaps
-    nowait = true, -- use `nowait` when creating keymaps
+    nowait = true,  -- use `nowait` when creating keymaps
 }
 
 local mappings = {
@@ -65,15 +65,20 @@ local mappings = {
         q = { "<cmd>FloatermKill<cr>", "Kill Pane" },
         g = { "<cmd>FloatermNew --width=1.0 --height=1.0 lazygit<cr>", "Lazygit" },
     },
+    z = {
+        name = "Misc",
+        b = { "<cmd>GitBlameToggle <cr>", "Git Blame" },
+        t = { "<cmd>TroubleToggle <cr>", "Trouble" },
+    },
 }
 
 local g_opts = {
-    mode = "n", -- Floaterm mode
+    mode = "n",     -- Floaterm mode
     prefix = "g",
-    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true, -- use `silent` when creating keymaps
+    buffer = nil,   -- Global mappings. Specify a buffer number for buffer local mappings
+    silent = true,  -- use `silent` when creating keymaps
     noremap = true, -- use `noremap` when creating keymaps
-    nowait = true, -- use `nowait` when creating keymaps
+    nowait = true,  -- use `nowait` when creating keymaps
 }
 
 local g_mappings = {
@@ -87,12 +92,12 @@ local g_mappings = {
 }
 
 local direct_opts = {
-    mode = "n", -- Floaterm mode
+    mode = "n",     -- Floaterm mode
     prefix = "",
-    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true, -- use `silent` when creating keymaps
+    buffer = nil,   -- Global mappings. Specify a buffer number for buffer local mappings
+    silent = true,  -- use `silent` when creating keymaps
     noremap = true, -- use `noremap` when creating keymaps
-    nowait = true, -- use `nowait` when creating keymaps
+    nowait = true,  -- use `nowait` when creating keymaps
 }
 
 local direct_mappings = {
@@ -104,12 +109,12 @@ local direct_mappings = {
 }
 
 local t_opts = {
-    mode = "t", -- Floaterm mode
+    mode = "t",     -- Floaterm mode
     prefix = "",
-    buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-    silent = true, -- use `silent` when creating keymaps
+    buffer = nil,   -- Global mappings. Specify a buffer number for buffer local mappings
+    silent = true,  -- use `silent` when creating keymaps
     noremap = true, -- use `noremap` when creating keymaps
-    nowait = true, -- use `nowait` when creating keymaps
+    nowait = true,  -- use `nowait` when creating keymaps
 }
 
 local t_mappings = {

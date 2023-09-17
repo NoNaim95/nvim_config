@@ -87,7 +87,11 @@ lsp.configure('clangd', {
 
             }
         )
-    }
+    },
+    cmd = {
+        "clangd",
+        "--offset-encoding=utf-16",
+    },
 })
 
 vim.api.nvim_create_autocmd(

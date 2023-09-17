@@ -136,6 +136,7 @@ local plugins = {
     -- use("lukas-reineke/indent-blankline.nvim")
     "RRethy/vim-illuminate",
     "chrisbra/NrrwRgn",
+    "f-person/git-blame.nvim",
     "simrat39/symbols-outline.nvim",
     { "romgrk/barbar.nvim",              dependencies = "nvim-web-devicons" },
 
@@ -161,6 +162,15 @@ local plugins = {
             --   `nvim-notify` is only needed, if you want to use the notification view.
             --   If not available, we use `mini` as the fallback
             "rcarriga/nvim-notify",
+        }
+    },
+    {
+        "folke/todo-comments.nvim",
+        dependencies = { "nvim-lua/plenary.nvim" },
+        opts = {
+            -- your configuration comes here
+            -- or leave it empty to use the default settings
+            -- refer to the configuration section below
         }
     }
 }
